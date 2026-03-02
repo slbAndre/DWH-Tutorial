@@ -4,7 +4,10 @@ from pathlib import Path
 
 import pyodbc
 
-from ingestion_DDL import ensure_database_exists, get_database_connection, run_ddl
+try:
+    from .ingestion_DDL import ensure_database_exists, get_database_connection, run_ddl
+except ImportError:
+    from ingestion_DDL import ensure_database_exists, get_database_connection, run_ddl
 
 
 RAW_DATA_ROOT = Path(
