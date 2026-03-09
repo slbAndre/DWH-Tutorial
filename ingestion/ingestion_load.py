@@ -10,8 +10,18 @@ except ImportError:
     from ingestion_DDL import ensure_database_exists, get_database_connection, run_ddl
 
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_RAW_DATA_ROOT = PROJECT_ROOT / "raw datasets"
+
 RAW_DATA_ROOT = Path(
-    os.getenv("RAW_DATA_ROOT", str(Path.home() / "Desktop" / "raw datasets"))
+    os.getenv(
+        "RAW_DATA_ROOT",
+        str(
+            DEFAULT_RAW_DATA_ROOT
+            if DEFAULT_RAW_DATA_ROOT.exists()
+            else Path.home() / "Desktop" / "raw datasets"
+        ),
+    )
 )
 
 
@@ -106,15 +116,14 @@ def _read_csv_rows(csv_path: Path, columns: list[str]) -> list[tuple[object, ...
 
 
 def _normalize_value(value: str | None) -> object:
-    """Trim whitespace and convert blanks to NULL for database inserts."""
+    """Preserve raw field values and map empty CSV cells to NULL."""
     if value is None:
         return None
 
-    stripped_value = value.strip()
-    if stripped_value == "":
+    if value == "":
         return None
 
-    return stripped_value
+    return value
 
 
 def load_csv_to_table(conn: pyodbc.Connection, table_name: str, csv_path: Path, columns: list[str]) -> int:
