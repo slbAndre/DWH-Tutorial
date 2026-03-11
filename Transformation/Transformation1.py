@@ -1,15 +1,17 @@
+# transformation1 for crm_cust_info standardization.
+# input: dwh.ingestion.crm_cust_info -> output: dwh.transformation.crm_cust_info.
 from pathlib import Path
 import sys
 
 import pandas as pd
 import pyodbc
 
-# Ensure imports work when this file is run directly from the Transformation folder.
+# Ensure imports work when this file is run directly from the transformation folder.
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from ingestion.ingestion_DDL import get_database_connection
+from ingestion.ingestion_ddl import get_database_connection
 
 
 TARGET_SCHEMA = "transformation"

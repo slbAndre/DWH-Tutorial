@@ -1,3 +1,5 @@
+# ingestion ddl setup for dwh schema and tables.
+# input: postgres env settings -> output: dwh.ingestion schema and tables.
 import os
 from getpass import getpass
 

@@ -1,3 +1,5 @@
+# ingestion load for crm and erp source files.
+# input: raw_datasets csv files -> output: populated dwh.ingestion tables.
 import csv
 import os
 from pathlib import Path
@@ -5,13 +7,13 @@ from pathlib import Path
 import pyodbc
 
 try:
-    from .ingestion_DDL import ensure_database_exists, get_database_connection, run_ddl
+    from .ingestion_ddl import ensure_database_exists, get_database_connection, run_ddl
 except ImportError:
-    from ingestion_DDL import ensure_database_exists, get_database_connection, run_ddl
+    from ingestion_ddl import ensure_database_exists, get_database_connection, run_ddl
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_RAW_DATA_ROOT = PROJECT_ROOT / "raw datasets"
+DEFAULT_RAW_DATA_ROOT = PROJECT_ROOT / "raw_datasets"
 
 RAW_DATA_ROOT = Path(
     os.getenv(
@@ -19,7 +21,7 @@ RAW_DATA_ROOT = Path(
         str(
             DEFAULT_RAW_DATA_ROOT
             if DEFAULT_RAW_DATA_ROOT.exists()
-            else Path.home() / "Desktop" / "raw datasets"
+            else Path.home() / "Desktop" / "raw_datasets"
         ),
     )
 )
@@ -69,17 +71,17 @@ CSV_LOAD_CONFIG = [
     },
     {
         "table_name": "erp_cust_az12",
-        "csv_path": RAW_DATA_ROOT / "source_erp" / "CUST_AZ12.csv",
+        "csv_path": RAW_DATA_ROOT / "source_erp" / "cust_az12.csv",
         "columns": ["CID", "BDATE", "GEN"],
     },
     {
         "table_name": "erp_loc_a101",
-        "csv_path": RAW_DATA_ROOT / "source_erp" / "LOC_A101.csv",
+        "csv_path": RAW_DATA_ROOT / "source_erp" / "loc_a101.csv",
         "columns": ["CID", "CNTRY"],
     },
     {
         "table_name": "erp_px_cat_g1v2",
-        "csv_path": RAW_DATA_ROOT / "source_erp" / "PX_CAT_G1V2.csv",
+        "csv_path": RAW_DATA_ROOT / "source_erp" / "px_cat_g1v2.csv",
         "columns": ["ID", "CAT", "SUBCAT", "MAINTENANCE"],
     },
 ]
